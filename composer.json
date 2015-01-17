@@ -1,0 +1,14 @@
+{
+    "name": "kikimor/yii-related-behavior",
+    "description": "Related behavior for Yii-1",
+    "require": {
+        "php": ">=5.5.0",
+        "yiisoft/yii": "1.1.*"
+    },
+    "authors": [
+        {
+            "name": "kikimor",
+            "email": "i@kikimor.ru"
+        }
+    ]
+}
