@@ -92,15 +92,16 @@ class RelatedBehavior extends CActiveRecordBehavior
 		$fake = new $class();
 		$pk = $fake->tableSchema->primaryKey;
 
-		// @todo Смелый допилит поддержку составных PK.
-		if (!is_string($pk)) {
-			throw new \Exception('Invalid PK type.');
-		}
-
 		$models = [];
 		foreach ($postData as $data) {
 			$model = null;
-			if (isset($data[$pk]) && $data[$pk]) {
+			if (is_array($pk)) {
+				$arrayPk = [];
+				foreach ($pk as $field) {
+					$arrayPk[$field] = isset($data[$field]) ? $data[$field] : null;
+				}
+				$model = $class::model()->findByPk($arrayPk);
+			} elseif (isset($data[$pk]) && $data[$pk]) {
 				$model = $class::model()->findByPk(intval($data[$pk]));
 			}
 			if (!$model) {
