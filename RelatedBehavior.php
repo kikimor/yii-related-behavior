@@ -100,7 +100,7 @@ class RelatedBehavior extends CActiveRecordBehavior
 				foreach ($pk as $field) {
 					$arrayPk[$field] = isset($data[$field]) ? $data[$field] : null;
 				}
-				$model = $class::model()->findByPk($arrayPk);
+				$model = $class::model()->findByAttributes($arrayPk);
 			} elseif (isset($data[$pk]) && $data[$pk]) {
 				$model = $class::model()->findByPk(intval($data[$pk]));
 			}
