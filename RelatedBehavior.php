@@ -95,14 +95,20 @@ class RelatedBehavior extends CActiveRecordBehavior
 		$models = [];
 		foreach ($postData as $data) {
 			$model = null;
-			if (is_array($pk)) {
-				$arrayPk = [];
-				foreach ($pk as $field) {
-					$arrayPk[$field] = isset($data[$field]) ? $data[$field] : null;
+			if (is_string($pk)) {
+				if (isset($data[$pk]) && $data[$pk]) {
+					$model = $class::model()->findByPk(intval($data[$pk]));
 				}
-				$model = $class::model()->findByAttributes($arrayPk);
-			} elseif (isset($data[$pk]) && $data[$pk]) {
-				$model = $class::model()->findByPk(intval($data[$pk]));
+			} elseif (is_array($pk)) {
+				$condition = [];
+				foreach ($pk as $primaryKey) {
+					if (isset($data[$primaryKey]) && $data[$primaryKey]) {
+						$condition[$primaryKey] = $data[$primaryKey];
+					}
+				}
+				if (count($condition) == count($pk)) {
+					$model = $class::model()->findByAttributes($condition);
+				}
 			}
 			if (!$model) {
 				$model = new $class();
@@ -155,7 +161,7 @@ class RelatedBehavior extends CActiveRecordBehavior
 
 		try {
 			$return = $this->updateRelationData($currentRelationsData, $dbRelationsData) &&
-			$this->addRelationData($currentRelationsData);
+				$this->addRelationData($currentRelationsData);
 		} catch (\Exception $e) {
 			$this->owner->$relation = $currentRelationsData;
 			throw $e;
