@@ -271,7 +271,7 @@ class RelatedBehavior extends CActiveRecordBehavior
 
 		/** @var CActiveRecord $currentRelationData */
 		foreach ($fk as $foreignName => $foreignData) {
-			$currentRelationData->$foreignName = $this->owner->$foreignData[1];
+			$currentRelationData->$foreignName = $this->owner->{$foreignData[1]};
 		}
 		return $currentRelationData;
 	}
